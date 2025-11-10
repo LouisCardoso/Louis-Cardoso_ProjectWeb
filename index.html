@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Amazing Nature • Vue Demo</title>
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Top bar / nav -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-logo">🌌</span>
+        <span class="brand-name">Amazing Nature</span>
+      </div>
+      <nav class="nav-links">
+        <a class="nav-link" href="#">Home</a>
+        <a class="nav-link" href="#">Gallery</a>
+        <a class="nav-link" href="#">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero section -->
+  <section class="hero">
+    <div class="hero-inner">
+      <h1 class="hero-title">Discover Wonders of Earth & Space</h1>
+      <p class="hero-sub">
+        Browse epic visuals, click to reveal descriptions, and explore item by item.
+      </p>
+    </div>
+  </section>
+
+  <!-- Vue app root -->
+  <main id="app" class="view-area">
+
+    <section class="item-card">
+
+      <!-- IMAGE -->
+      <div class="item-visual">
+        <img :src="currentItem.img" :alt="currentItem.title" />
+      </div>
+
+      <!-- CONTENT -->
+      <div class="item-info">
+
+        <!-- Click to toggle -->
+        <div class="info-bubble" @click="toggleText" role="button" tabindex="0">
+          <h2 v-if="showTitle" class="info-title">{{ currentItem.title }}</h2>
+          <p v-else class="info-desc">{{ currentItem.desc }}</p>
+
+          <p class="bubble-hint">
+            click to toggle title / description
+          </p>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-row">
+          <button @click="prevItem" class="btn-ghost">← Previous</button>
+          <button @click="nextItem" class="btn-fill">Next →</button>
+        </div>
+
+        <!-- index indicator -->
+        <p class="counter">
+          Viewing {{ currentIndex + 1 }} / {{ items.length }}
+        </p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Louis Cardoso • 2025</p>
+  </footer>
+
+  <!-- Vue CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+
+  <!-- Data -->
+  <script src="data/items.js"></script>
+
+  <!-- App logic -->
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          items: itemsData,
+          currentIndex: 0,
+          showTitle: true
+        };
+      },
+      computed: {
+        currentItem() {
+          return this.items[this.currentIndex];
+        }
+      },
+      methods: {
+        toggleText() {
+          this.showTitle = !this.showTitle;
+        },
+        nextItem() {
+          this.currentIndex = (this.currentIndex + 1) % this.items.length;
+          this.showTitle = true;
+        },
+        prevItem() {
+          this.currentIndex =
+            (this.currentIndex - 1 + this.items.length) % this.items.length;
+          this.showTitle = true;
+        }
+      }
+    }).mount("#app");
+  </script>
+
+</body>
+</html>
